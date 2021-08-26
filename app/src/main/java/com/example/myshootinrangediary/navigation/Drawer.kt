@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import com.example.myshootinrangediary.ui.theme.MyShootinRangeDiaryTheme
 
 sealed class DrawerScreens(val title: String, val route: String) {
-    object Home : DrawerScreens("Home", "home")
-    object Account : DrawerScreens("Account", "account")
+    object Home : DrawerScreens("Ekran główny", "home")
+    object Account : DrawerScreens("Dodaaj wpis", "Add entry")
     object Help : DrawerScreens( "Help", "help")
 }
 

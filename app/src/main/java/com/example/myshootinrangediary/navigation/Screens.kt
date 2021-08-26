@@ -1,8 +1,6 @@
 package com.example.myshootinrangediary.navigation
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -12,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.myshootinrangediary.form.AddNewEntryForm
 
 @Composable
 fun Home(openDrawer: () -> Unit) {
@@ -31,19 +30,14 @@ fun Home(openDrawer: () -> Unit) {
 }
 
 @Composable
-fun Account(openDrawer: () -> Unit) {
+fun AddNewEntry(openDrawer: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
-            title = "Account",
+            title = "Tworzenie wpisu",
             buttonIcon = Icons.Filled.Menu,
             onButtonClicked = { openDrawer() }
         )
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Account.", style = MaterialTheme.typography.h4)
-        }
+        AddNewEntryForm()
     }
 }
 

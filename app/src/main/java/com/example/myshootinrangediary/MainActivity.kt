@@ -64,7 +64,7 @@ fun AppMainScreen() {
                     )
                 }
                 composable(DrawerScreens.Account.route) {
-                    Account(
+                    AddNewEntry(
                         openDrawer = {
                             openDrawer()
                         }
