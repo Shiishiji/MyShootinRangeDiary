@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.myshootinrangediary.form.AddNewEntryForm
+import com.example.myshootinrangediary.list.EntryListView
 
 @Composable
 fun Home(openDrawer: () -> Unit) {
@@ -38,6 +39,18 @@ fun AddNewEntry(openDrawer: () -> Unit) {
             onButtonClicked = { openDrawer() }
         )
         AddNewEntryForm()
+    }
+}
+
+@Composable
+fun ListOfEntries(openDrawer: () -> Unit) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        TopBar(
+            title = "Lista wpisów",
+            buttonIcon = Icons.Filled.Menu,
+            onButtonClicked = { openDrawer() }
+        )
+        EntryListView()
     }
 }
 

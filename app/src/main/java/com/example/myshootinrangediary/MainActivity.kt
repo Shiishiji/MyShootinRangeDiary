@@ -63,16 +63,18 @@ fun AppMainScreen() {
                         }
                     )
                 }
-                composable(DrawerScreens.Account.route) {
+                composable(DrawerScreens.AddEntry.route) {
                     AddNewEntry(
                         openDrawer = {
                             openDrawer()
                         }
                     )
                 }
-                composable(DrawerScreens.Help.route) {
-                    Help(
-                        navController = navController
+                composable(DrawerScreens.ListOfEntries.route) {
+                    ListOfEntries(
+                        openDrawer = {
+                            openDrawer()
+                        }
                     )
                 }
             }
