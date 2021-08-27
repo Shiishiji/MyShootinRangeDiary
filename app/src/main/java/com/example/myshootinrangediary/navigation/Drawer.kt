@@ -14,14 +14,12 @@ sealed class DrawerScreens(val title: String, val route: String) {
     object Home : DrawerScreens("Ekran główny", "home")
     object AddEntry : DrawerScreens("Dodaj wpis", "Add entry")
     object ListOfEntries : DrawerScreens("Lista wpisów", "List of entries")
-    object Help : DrawerScreens( "Help", "help")
 }
 
 private val screens = listOf(
     DrawerScreens.Home,
     DrawerScreens.AddEntry,
     DrawerScreens.ListOfEntries,
-    DrawerScreens.Help
 )
 @Composable
 fun Drawer(

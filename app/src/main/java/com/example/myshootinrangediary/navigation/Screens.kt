@@ -1,5 +1,7 @@
 package com.example.myshootinrangediary.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -30,6 +32,7 @@ fun Home(openDrawer: () -> Unit) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddNewEntry(openDrawer: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -42,6 +45,7 @@ fun AddNewEntry(openDrawer: () -> Unit) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ListOfEntries(openDrawer: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -51,22 +55,5 @@ fun ListOfEntries(openDrawer: () -> Unit) {
             onButtonClicked = { openDrawer() }
         )
         EntryListView()
-    }
-}
-
-@Composable
-fun Help(navController: NavController) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        TopBar(
-            title = "Help",
-            buttonIcon = Icons.Filled.ArrowBack,
-            onButtonClicked = { navController.popBackStack() }
-        )
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Help.", style = MaterialTheme.typography.h4)
-        }
     }
 }
