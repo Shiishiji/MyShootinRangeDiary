@@ -1,31 +1,36 @@
 package com.example.myshootinrangediary.form
 
 import android.os.Build
+import android.view.MotionEvent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.DarkGray
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.example.myshootinrangediary.repository.Entry
 import com.example.myshootinrangediary.repository.EntryRepository
 import com.example.myshootinrangediary.repository.Weapon
 import com.example.myshootinrangediary.utils.DateTimeConverter
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+@ExperimentalComposeUiApi
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddNewEntryForm()
@@ -56,7 +61,7 @@ fun AddNewEntryForm()
                 .fillMaxWidth()
                 .padding(PaddingValues(Dp(5.0F))),
             elevation = Dp(5.0F),
-            border = BorderStroke(Dp(1.0F), Color.DarkGray)
+            border = BorderStroke(Dp(1.0F), DarkGray)
         )
         {
             Column(modifier = Modifier.fillMaxWidth()) {
@@ -83,7 +88,7 @@ fun AddNewEntryForm()
                 .fillMaxWidth()
                 .padding(PaddingValues(Dp(5.0F))),
             elevation = Dp(5.0F),
-            border = BorderStroke(Dp(1.0F), Color.DarkGray)
+            border = BorderStroke(Dp(1.0F), DarkGray)
         )
         {
             Column(modifier = Modifier.fillMaxWidth())
@@ -109,7 +114,7 @@ fun AddNewEntryForm()
                 .fillMaxWidth()
                 .padding(PaddingValues(Dp(5.0F))),
             elevation = Dp(5.0F),
-            border = BorderStroke(Dp(1.0F), Color.DarkGray)
+            border = BorderStroke(Dp(1.0F), DarkGray)
         )
         {
             TextField(
@@ -126,7 +131,7 @@ fun AddNewEntryForm()
                 .fillMaxWidth()
                 .padding(PaddingValues(Dp(5.0F))),
             elevation = Dp(5.0F),
-            border = BorderStroke(Dp(1.0F), Color.DarkGray)
+            border = BorderStroke(Dp(1.0F), DarkGray)
         )
         {
             Column(modifier = Modifier.fillMaxWidth())
@@ -153,7 +158,7 @@ fun AddNewEntryForm()
                             .fillMaxWidth()
                             .padding(PaddingValues(Dp(5.0F))),
                         elevation = Dp(5.0F),
-                        border = BorderStroke(Dp(1.0F), Color.DarkGray)
+                        border = BorderStroke(Dp(1.0F), DarkGray)
                     )
                     {
                         Column()
@@ -178,49 +183,55 @@ fun AddNewEntryForm()
             }
         }
 
+        Text(text = "Podpis", style = MaterialTheme.typography.h6)
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(PaddingValues(Dp(5.0F))),
             elevation = Dp(5.0F),
-            border = BorderStroke(Dp(1.0F), Color.DarkGray)
+            border = BorderStroke(Dp(1.0F), DarkGray)
         )
         {
-            TextField(
-                value = form_signature,
-                onValueChange = { form_signature = it },
-                label = { Text(text = "Podpis") },
-                singleLine = true
-            )
+            PaintingField()
         }
 
         Button(
             onClick = {
                 val dateStart = if (dateTimeStart.isNotBlank()) {
-                    LocalDateTime.parse(dateTimeStart, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+                    LocalDateTime.parse(
+                        dateTimeStart,
+                        DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+                    )
                 } else {
                     LocalDateTime.now()
                 }
                 val dateEnd = if (dateTimeEnd.isNotBlank()) {
-                    LocalDateTime.parse(dateTimeEnd, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+                    LocalDateTime.parse(
+                        dateTimeEnd,
+                        DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+                    )
                 } else {
                     null
                 }
 
-                EntryRepository.addEntry(Entry(
-                    form_firstname,
-                    form_lastname,
-                    dateStart,
-                    form_license,
-                    form_signature,
-                    dateEnd,
-                    arrayListOf(Weapon(
-                      form_weaponFirstName,
-                      form_weaponLastName,
-                      form_weaponType,
-                      form_weaponCaliber
-                    ))
-                ))
+                EntryRepository.addEntry(
+                    Entry(
+                        form_firstname,
+                        form_lastname,
+                        dateStart,
+                        form_license,
+                        form_signature,
+                        dateEnd,
+                        arrayListOf(
+                            Weapon(
+                                form_weaponFirstName,
+                                form_weaponLastName,
+                                form_weaponType,
+                                form_weaponCaliber
+                            )
+                        )
+                    )
+                )
             },
             modifier = Modifier.fillMaxWidth()
         )

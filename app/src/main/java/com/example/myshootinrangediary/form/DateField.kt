@@ -25,7 +25,7 @@ fun DateField(
     onValueChange: (String) -> Unit
 )
 {
-    val dialog = MaterialDialog(LocalContext.current)
+    val context = LocalContext.current
     val textState = remember { mutableStateOf(TextFieldValue(text = value)) }
 
     Column(modifier = Modifier.padding(16.dp)) {
@@ -38,6 +38,7 @@ fun DateField(
                 }
             },
             onClick = {
+                val dialog = MaterialDialog(context)
                 dialog.show {
                     datePicker { dialog, date ->
                         textState.value = TextFieldValue(
