@@ -1,11 +1,14 @@
 package com.example.myshootinrangediary
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,6 +18,8 @@ import com.example.myshootinrangediary.ui.theme.MyShootinRangeDiaryTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalComposeUiApi
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -24,6 +29,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+@ExperimentalComposeUiApi
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppMainScreen() {
     val navController = rememberNavController()
@@ -82,6 +89,8 @@ fun AppMainScreen() {
     }
 }
 
+@ExperimentalComposeUiApi
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {

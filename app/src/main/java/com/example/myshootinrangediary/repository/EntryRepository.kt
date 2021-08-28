@@ -4,6 +4,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.time.LocalDateTime
 import java.time.Month
+import java.util.*
+import kotlin.collections.ArrayList
 
 object EntryRepository
 {
@@ -11,25 +13,29 @@ object EntryRepository
         @RequiresApi(Build.VERSION_CODES.O)
         get() {
             return arrayListOf(
-                Entry("Damian", "Test1",
+                Entry(
+                    UUID.randomUUID(),
+                    "Damian", "Test1",
                     LocalDateTime.of(2021, Month.OCTOBER, 26,12,20),
                     "licence",
-                    "signatureString",
                     LocalDateTime.of(2021, Month.OCTOBER, 26,13,0)),
-                Entry("Asia", "Test2",
+                Entry(
+                    UUID.randomUUID(),
+                    "Asia", "Test2",
                     LocalDateTime.of(2021, Month.OCTOBER, 26,12,20),
                     "licence",
-                    "signatureString",
                     LocalDateTime.of(2021, Month.OCTOBER, 26,13,0)),
-                Entry("Marcin", "Test3",
+                Entry(
+                    UUID.randomUUID(),
+                    "Marcin", "Test3",
                     LocalDateTime.of(2021, Month.OCTOBER, 26,14,0),
                     "licence",
-                    "signatureString",
                     LocalDateTime.of(2021, Month.OCTOBER, 26,15,0)),
-                Entry("Paweł", "Test4",
+                Entry(
+                    UUID.randomUUID(),
+                    "Paweł", "Test4",
                     LocalDateTime.of(2021, Month.OCTOBER, 26,19,20),
-                    "licence",
-                    "signatureString"),
+                    "licence"),
             )
         }
 

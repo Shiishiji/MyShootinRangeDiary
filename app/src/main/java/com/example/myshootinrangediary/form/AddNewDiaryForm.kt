@@ -1,10 +1,11 @@
 package com.example.myshootinrangediary.form
 
+import android.graphics.Bitmap
 import android.os.Build
-import android.view.MotionEvent
+import android.os.Handler
+import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -13,28 +14,28 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import androidx.core.graphics.applyCanvas
+import androidx.navigation.compose.rememberNavController
+import com.example.myshootinrangediary.navigation.DrawerScreens
 import com.example.myshootinrangediary.repository.Entry
 import com.example.myshootinrangediary.repository.EntryRepository
 import com.example.myshootinrangediary.repository.Weapon
 import com.example.myshootinrangediary.utils.DateTimeConverter
+import java.io.File
+import java.lang.Exception
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 @ExperimentalComposeUiApi
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddNewEntryForm()
 {
+    val entryId: UUID = UUID.randomUUID()
+
     var form_firstname by rememberSaveable { mutableStateOf("") }
     var form_lastname by rememberSaveable { mutableStateOf("") }
     var form_license by rememberSaveable { mutableStateOf("") }
@@ -42,7 +43,6 @@ fun AddNewEntryForm()
     var form_weaponCaliber by rememberSaveable { mutableStateOf("") }
     var form_weaponFirstName by rememberSaveable { mutableStateOf("") }
     var form_weaponLastName by rememberSaveable { mutableStateOf("") }
-    var form_signature by rememberSaveable { mutableStateOf("") }
 
     var dateTimeStart by rememberSaveable { mutableStateOf(
         DateTimeConverter.dateTimeToString(
@@ -50,6 +50,8 @@ fun AddNewEntryForm()
         )
     ) }
     var dateTimeEnd by rememberSaveable { mutableStateOf("") }
+
+    var form_submitStatus: Boolean? by rememberSaveable { mutableStateOf(null) }
 
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -192,7 +194,7 @@ fun AddNewEntryForm()
             border = BorderStroke(Dp(1.0F), DarkGray)
         )
         {
-            PaintingField()
+            SignatureField(entryId)
         }
 
         Button(
@@ -214,29 +216,60 @@ fun AddNewEntryForm()
                     null
                 }
 
-                EntryRepository.addEntry(
-                    Entry(
-                        form_firstname,
-                        form_lastname,
-                        dateStart,
-                        form_license,
-                        form_signature,
-                        dateEnd,
-                        arrayListOf(
-                            Weapon(
-                                form_weaponFirstName,
-                                form_weaponLastName,
-                                form_weaponType,
-                                form_weaponCaliber
+                try {
+                    EntryRepository.addEntry(
+                        Entry(
+                            entryId,
+                            form_firstname,
+                            form_lastname,
+                            dateStart,
+                            form_license,
+                            dateEnd,
+                            arrayListOf(
+                                Weapon(
+                                    form_weaponFirstName,
+                                    form_weaponLastName,
+                                    form_weaponType,
+                                    form_weaponCaliber
+                                )
                             )
                         )
                     )
-                )
+
+                    form_submitStatus = true
+                } catch (e: Exception) {
+                    form_submitStatus = false
+                }
             },
             modifier = Modifier.fillMaxWidth()
         )
         {
             Text(text = "Zapisz wpis")
+
+            if (true == form_submitStatus) {
+                AlertDialog(
+                    onDismissRequest = {
+                        // Dismiss the dialog when the user clicks outside the dialog or on the back
+                        // button. If you want to disable that functionality, simply use an empty
+                        // onCloseRequest.
+                        form_submitStatus = null // it will close the dialog
+                    },
+                    text = {
+                           Text("Dodano wpis.", style = MaterialTheme.typography.h6)
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                form_submitStatus = null // it will close the dialog
+                                // Navigate to home?
+                            }
+                        )
+                        {
+                            Text("Ok")
+                        }
+                    }
+                )
+            }
         }
     }
 }

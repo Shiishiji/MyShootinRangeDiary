@@ -1,8 +1,12 @@
 package com.example.myshootinrangediary.form
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.os.Handler
+import android.os.Looper
 import android.view.MotionEvent
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,15 +22,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.imageResource
+import androidx.core.graphics.applyCanvas
+import java.io.File
+import java.util.*
 
 
 @ExperimentalComposeUiApi
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun PaintingField()
+fun SignatureField(id: UUID)
 {
         Column {
             val openDialog = remember { mutableStateOf(false)  }
@@ -48,9 +59,7 @@ fun PaintingField()
                         // onCloseRequest.
                         openDialog.value = false
                     },
-                    title = {
-                        Text(text = "Wykonaj podpis")
-                    },
+                    title = {},
                     text = {
                         Canvas(
                             modifier = Modifier
@@ -79,17 +88,40 @@ fun PaintingField()
                                 drawPath(
                                     path = path,
                                     color = Color.Black,
-                                    alpha = 0.5f,
-                                    style = Stroke(10f)
+                                    alpha = 1f,
+                                    style = Stroke(5f)
                                 )
                             }
                         }
                     },
                     confirmButton = {
+                        val view = LocalView.current
+                        val context = LocalContext.current
                         Button(
                             onClick = {
-                                openDialog.value = false
-                            }) {
+                                // Save bitmap as file
+                                val handler = Handler(Looper.getMainLooper())
+                                handler.postDelayed(Runnable {
+                                    val bmp = Bitmap.createBitmap(view.width, view.height,
+                                        Bitmap.Config.ARGB_8888).applyCanvas {
+                                        view.draw(this)
+                                    }
+
+                                    val filename: String = String.format("%s.png", id.toString())
+
+                                    bmp.let {
+                                        File(context.filesDir, filename)
+                                            .writeBitmap(
+                                                bmp,
+                                                Bitmap.CompressFormat.PNG,
+                                                85
+                                            )
+                                    }
+                                    openDialog.value = false // close dialog
+                                }, 1000)
+                            }
+                        )
+                        {
                             Text("Zapisz podpis")
                         }
                     },
@@ -104,4 +136,11 @@ fun PaintingField()
                 )
             }
         }
+}
+
+private fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
+    outputStream().use { out ->
+        bitmap.compress(format, quality, out)
+        out.flush()
+    }
 }
